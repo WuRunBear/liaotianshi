@@ -1,0 +1,302 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 字体 */
+body {
+  font: 16px Arial, Helvetica, sans-serif;
+}
+
+/* icon矢量图标的大小 */
+[class*="icon-"],
+[class^="icon-"] {
+  font-size: 1.5rem;
+}
+
+.font-little {
+  font-size: .7rem;
+}
+
+.font-big {
+  font-size: 1.3rem
+}
+
+/* 弹性盒子 */
+.flex {
+  display: flex;
+}
+
+.flex-margin-auto {
+  margin: auto;
+}
+
+.flex-direction-column {
+  flex-direction: column;
+}
+
+.flex-align-items-center {
+  align-items: center;
+}
+
+.flex-justify-content-center {
+  justify-content: center;
+}
+
+/* 固定定位 */
+.position-fixed {
+  position: fixed;
+}
+
+/* 相对定位 */
+.position-relative {
+  position: relative;
+}
+
+/* 绝对定位 */
+.position-absolute {
+  position: absolute;
+}
+
+/* 位置 */
+.left-0 {
+  left: 0;
+}
+
+.left-100 {
+  left: 100%;
+}
+
+.right-0 {
+  right: 0;
+}
+
+.right-100 {
+  right: 100%;
+}
+
+.top-0 {
+  top: 0;
+}
+
+.top-100 {
+  top: 100%;
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
+.bottom-100 {
+  bottom: 100%;
+}
+
+/* 内外边距 */
+/* 0.7rem */
+.margin-left-07-rem {
+  margin-left: .7rem;
+}
+
+.margin-right-07-rem {
+  margin-right: .7rem;
+}
+
+.margin-top-07-rem {
+  margin-top: .7rem;
+}
+
+.margin-bottom-07-rem {
+  margin-bottom: .7em;
+}
+
+.margin-07-rem {
+  margin: .7em;
+}
+
+.padding-left-07-rem {
+  padding-left: .7rem;
+}
+
+.padding-right-07-rem {
+  padding-right: .7rem;
+}
+
+.padding-top-07-rem {
+  padding-top: .7rem;
+}
+
+.padding-bottom-07-rem {
+  padding-bottom: .7rem;
+}
+
+.padding-07-rem {
+  padding: .7rem;
+}
+
+/* 1rem */
+.margin-left-1-rem {
+  margin-left: 1rem;
+}
+
+.margin-right-1-rem {
+  margin-right: 1rem;
+}
+
+.margin-top-1-rem {
+  margin-top: 1rem;
+}
+
+.margin-bottom-1-rem {
+  margin-bottom: 1rem;
+}
+
+.margin-1-rem {
+  margin: 1rem;
+}
+
+.padding-left-1-rem {
+  padding-left: 1rem;
+}
+
+.padding-right-1-rem {
+  padding-right: 1rem;
+}
+
+.padding-top-1-rem {
+  padding-top: 1rem;
+}
+
+.padding-bottom-1-rem {
+  padding-bottom: 1rem;
+}
+
+.padding-1-rem {
+  padding: 1rem;
+}
+
+/* 百分之百 */
+.margin-left-100 {
+  margin-left: 100%;
+}
+
+.margin-right-100 {
+  margin-right: 100%;
+}
+
+.margin-top-100 {
+  margin-top: 100%;
+}
+
+.margin-bottom-100 {
+  margin-bottom: 100%;
+}
+
+.margin-100 {
+  margin: 100%;
+}
+
+.padding-left-100 {
+  padding-left: 100%;
+}
+
+.padding-right-100 {
+  padding-right: 100%;
+}
+
+.padding-top-100 {
+  padding-top: 100%;
+}
+
+.padding-bottom-100 {
+  padding-bottom: 100%;
+}
+
+/* auto */
+.margin-left-auto {
+  margin-left: auto;
+}
+
+.margin-right-auto {
+  margin-right: auto;
+}
+
+.margin-top-auto {
+  margin-top: auto;
+}
+
+.margin-bottom-auto {
+  margin-bottom: auto;
+}
+
+.margin-auto {
+  margin: auto;
+}
+
+.padding-left-auto {
+  padding-left: auto;
+}
+
+.padding-right-auto {
+  padding-right: auto;
+}
+
+.padding-top-auto {
+  padding-top: auto;
+}
+
+.padding-bottom-auto {
+  padding-bottom: auto;
+}
+
+.padding-auto {
+  padding: auto;
+}
+
+/* 宽高度 */
+.width-0 {
+  width: 0;
+}
+
+.height-0 {
+  height: 0;
+}
+
+.width-100 {
+  width: 100%;
+}
+
+.height-100 {
+  height: 100%;
+}
+
+.width-100-vw {
+  width: 100vw;
+}
+
+.height-100-vh {
+  height: 100vh;
+}
+
+/* 删除默认样式 */
+/* 单选框 */
+/* input[type='radio'] {
+  display: none;
+} */
+/* .input[type] {
+	overflow: hidden;
+	border: solid 1px #c4c4c4; */
+input {
+  /* flex: 1; */
+  border: solid 1px #c4c4c4;
+  outline: none;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+/* } */
+/* a标签 */
+a {
+  color: #000;
+  text-decoration: none;
+}
