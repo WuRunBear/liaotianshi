@@ -1,5 +1,5 @@
 import urls from '../conf/url'
-const url = `${urls.apiUrl}utils`
+const url = `${urls.apiUrl}/utils`
 
 /**
  * 上传文件 api

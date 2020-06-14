@@ -1,5 +1,5 @@
 import urls from '../conf/url'
-const url = `${urls.apiUrl}friend`
+const url = `${urls.apiUrl}/friend`
 
 /**
  * 验证是否为好友

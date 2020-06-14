@@ -2,7 +2,7 @@ import axios from 'axios'
 import urls from '../conf/url';
 import store from '../store/index';
 
-const url = `${urls.apiUrl}users`
+const url = `${urls.apiUrl}/users`
 
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {

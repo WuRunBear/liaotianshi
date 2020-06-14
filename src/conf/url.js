@@ -1,6 +1,8 @@
-
-const url = {
-  apiUrl:'http://192.168.3.18/api/'
-  // apiUrl:'http://2583813ig5.qicp.vip/api/'
+const url = 'http://192.168.3.18:8081'
+const URL = {
+  url,
+  apiUrl: `${url}/api`
+  // apiUrl:'http://2583813ig5.qicp.vip/'
 }
-export default url
+
+export default URL

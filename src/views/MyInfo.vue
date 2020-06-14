@@ -43,6 +43,8 @@ export default {
 		// 过滤userInfo里的属性
 		handleUserInfo: function() {
 			delete this.userInfo.id
+			console.log(this.userInfo);
+			
 
 			return this.userInfo
 		}

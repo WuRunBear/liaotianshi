@@ -12,7 +12,8 @@ export default new Vuex.Store({
     // 加载状态延迟（定时器setTimeout）
     loadingTimer: null,
     // selectUser的用户数据
-    selectUserData: {}
+    selectUserData: {},
+    chatRoom: []
   },
   mutations: {
     /**
@@ -23,8 +24,8 @@ export default new Vuex.Store({
       state.selectUserData = data
     },
     /**
-    * 删除selectUser的用户数据
-    */
+     * 删除selectUser的用户数据
+     */
     remSelectUserData(state, data) {
       state.selectUserData = {}
     },
@@ -59,6 +60,9 @@ export default new Vuex.Store({
       // 清除定时器 
       window.clearTimeout(state.loadingTimer)
       state.loading = false
+    },
+    chatRoom(state, data) {
+      state.chatRoom[data.roomId] = data.data
     }
   },
   getters: {
@@ -81,8 +85,16 @@ export default new Vuex.Store({
      */
     loading: state => {
       return state.loading
+    },
+    chatRoom: state => {
+      return state.chatRoom
     }
   },
-  actions: {},
+  actions: {
+    async SOCKET_msg(context, data) {
+      
+      context.commit('chatRoom', data)
+    }
+  },
   modules: {}
 })

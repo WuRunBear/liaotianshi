@@ -34,12 +34,11 @@ export default {
 
 						this.$router.push(this.toPath, () => {})
 					} else {
-						alert(res.data.message)
+						this.$toast.fail(res.data.message)
 					}
 				})
 				.catch(err => {
-					alert('登录失败')
-					console.log(err)
+					this.$toast.fail('登录失败')
 				})
 		},
 		register: function(e) {

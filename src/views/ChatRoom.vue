@@ -15,23 +15,33 @@
 						</div>
 
 						<div class='msgBox flex'>
-							<div class='msg' v-html='item.msg'></div>
+							<div class='msg' v-text='item.msg'></div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</main>
 
-		<footer>
-			<div class='flex position-fixed bottom-0'>
-				<!-- <div class='left'></div> -->
+		<footer class='flex'>
+			<van-field
+				v-model='msgText'
+				type='textarea'
+				rows='1'
+				:autosize='{maxHeight:16*4}'
+				ref='msgTextE'
+			>
+				<template #button>
+					<van-button size='small' type='primary' @click='send'>发送</van-button>
+				</template>
+			</van-field>
+			<!-- <div class='left'></div>
 				<div class='center flex'>
-					<input-text id='msgText' class='input-text' @keydown.enter='send' />
+					<van-field class='input-text' />
+					<input-text id='msgText' class='input-text' @keydown.enter='send' autocomplete='off'  />
 				</div>
 				<div class='right'>
 					<input-button class='input-button' value='发送' @click='send' />
-				</div>
-			</div>
+			</div>-->
 		</footer>
 	</div>
 </template>
@@ -41,7 +51,26 @@ export default {
 	name: 'Chat-Room',
 	data() {
 		return {
-			msgListData: [{ id: 1, msg: 'fdsa', isMe: false }]
+			msgListData: [],
+			msgText: ''
+		}
+	},
+	// 使用sockets属性无效
+	sockets: {
+		connect: function() {
+			// this.id = this.$socket.id
+		},
+		msg(data) {
+			let id =
+				this.msgListData.length > 0
+					? this.msgListData[this.msgListData.length - 1].id + 1
+					: 1
+
+			this.msgListData.push({
+				id,
+				msg: data.data,
+				isMe: false
+			})
 		}
 	},
 	methods: {
@@ -50,21 +79,28 @@ export default {
 			// alert('后退')
 		},
 		send: function(e) {
-			let msgTextE = document.querySelector('#msgText'),
-				msgText = msgTextE.value
+			let id =
+				this.msgListData.length > 0
+					? this.msgListData[this.msgListData.length - 1].id + 1
+					: 1
 
-			// if (msgText !== '') {
-			this.msgListData.push({
-				id: this.msgListData[this.msgListData.length - 1].id + 1,
-				msg: msgText,
-				isMe: true
-			})
-			msgTextE.value = ''
-			// } else {
-			// 	alert('内容不能为空')
-			// }
+			if (this.msgText !== '') {
+				this.msgListData.push({
+					id,
+					msg: this.msgText,
+					isMe: true
+				})
 
-			msgTextE.focus()
+				this.$socket.emit('data', { roomId: this.RoomId, data: this.msgText })
+			}
+
+			// this.$store.dispatch('SOCKET_msg').then(e => {
+			// 	console.log(e)
+			// })
+
+			this.$refs.msgTextE.focus()
+
+			this.msgText = ''
 		},
 		initMsgList: function() {
 			// 初始化消息列表的滚动位置到最底部
@@ -75,6 +111,7 @@ export default {
 	},
 	mounted() {
 		this.initMsgList()
+		this.$socket.emit('addRoom', { roomId: this.RoomId })
 	},
 	watch: {
 		msgListData: function(newData, oldData) {
@@ -83,7 +120,8 @@ export default {
 	},
 	props: {
 		RoomId: {
-			default: '0'
+			type: String,
+			default: '1'
 		}
 	}
 }
@@ -124,6 +162,7 @@ export default {
 						word-wrap: break-word;
 						word-break: normal;
 						border: solid 1px #e4e4e4;
+						white-space: break-spaces;
 					}
 				}
 				.my {
@@ -138,37 +177,36 @@ export default {
 	}
 
 	footer {
-		height: 3rem;
+		padding: 0.5rem;
 
 		> div:first-child {
-			width: 100%;
-			height: 3rem;
-			border-top: solid 1px #e4e4e4;
-			background: #f4f4f4;
-
-			// .left {
-			// 	flex: 1;
-			// }
-			.center {
-				flex: 7;
-
-				.input-text {
-					padding: 0.3rem;
-					border: none;
-					flex: 1;
-				}
-			}
-			.right {
-				flex: 2;
-				box-sizing: border-box;
-				padding: 0.5rem 0;
-
-				.input-button {
-					margin: 0 0.5rem;
-					height: 100%;
-				}
-			}
+			padding: 0 0 0 1rem;
 		}
+		// > div:first-child {
+		// 	// width: 100%;
+		// 	// height: 3rem;
+		// 	flex: 1;
+		// 	border-top: solid 1px #e4e4e4;
+		// 	background: #f4f4f4;
+
+		// 	// .left {
+		// 	// 	flex: 1;
+		// 	// }
+		// 	.center {
+		// 		flex: 7;
+		// 		padding: 0.5rem 0;
+		// 	}
+		// 	.right {
+		// 		flex: 2;
+		// 		box-sizing: border-box;
+		// 		padding: 0.5rem 0;
+
+		// 		.input-button {
+		// 			margin: 0 0.5rem;
+		// 			height: 100%;
+		// 		}
+		// 	}
+		// }
 	}
 }
 </style>

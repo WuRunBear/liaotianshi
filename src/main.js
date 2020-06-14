@@ -4,6 +4,18 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueSocketIO from 'vue-socket.io'
+
+import urlConf from './conf/url'
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: urlConf.url, //
+  vuex: {
+    store,
+    actionPrefix: 'SOCKET_',
+    mutationPrefix: 'SOCKET_'
+  },
+}))
 
 // vant按需引入
 import {
@@ -12,7 +24,9 @@ import {
   Toast,
   Circle,
   Icon,
-  List
+  List,
+  Field,
+  Button
 } from 'vant'
 // 注册vant组件
 Vue.use(Overlay)
@@ -21,6 +35,8 @@ Vue.use(Toast)
 Vue.use(Circle)
 Vue.use(Icon)
 Vue.use(List)
+Vue.use(Field)
+Vue.use(Button)
 
 import userApi from './api/users'
 import friendApi from './api/friends'
@@ -38,6 +54,8 @@ import '@/assets/css/base.css'
 import '@/assets/css/icon/style.css'
 
 Vue.config.productionTip = false
+
+axios.defaults.withCredentials = true
 
 Vue.use(VueAxios, axios)
 
