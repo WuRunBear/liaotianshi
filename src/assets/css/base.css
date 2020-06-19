@@ -274,8 +274,20 @@ body {
   width: 100vw;
 }
 
+.width-100-vw {
+  width: 100vw;
+}
+
 .height-100-vh {
   height: 100vh;
+}
+
+.min-width-100-vw {
+  min-width: 100vw;
+}
+
+.min-height-100-vh {
+  min-height: 100vh;
 }
 
 /* 删除默认样式 */

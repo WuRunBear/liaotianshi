@@ -1,12 +1,22 @@
 <template>
-	<div id='app' class='height-100-vh'>
+	<div id='app' class='min-height-100-vh'>
 		<router-view />
 
-		<van-overlay
-			class='flex loading'
-			:show='$store.getters.loading'
-			@click='$store.commit("hiddenLoading")'
+		<!-- 消息提示 -->
+		<van-notify
+			v-model='$store.getters.notify.show'
+			@click='function(e){
+				$router.push($store.getters.notify.to || "",()=>{}); 
+				$store.getters.notify.show = false
+			}'
+			type='success'
 		>
+			<van-icon name='friends' />
+			<span v-text='$store.getters.notify.msg'></span>
+		</van-notify>
+
+		<!-- 加载中提示 -->
+		<van-overlay class='flex loading' :show='$store.getters.loading'>
 			<van-loading size='50' class='margin-auto' vertical>加载中...</van-loading>
 		</van-overlay>
 	</div>

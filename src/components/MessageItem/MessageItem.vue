@@ -30,7 +30,7 @@ export default {
 	data() {
 		return {
 			check: false,
-			to: { name: 'ChatRoom', params: { RoomId: 1 } }
+			to: { name: 'ChatRoom', params: { roomId: this.roomId } }
 		}
 	},
 	methods: {
@@ -48,6 +48,7 @@ export default {
 				return process.env.BASE_URL + 'images/logo.png'
 			}
 		},
+		roomId: String,
 		lastMsg: String,
 		lastTime: String
 	}

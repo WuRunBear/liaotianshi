@@ -1,4 +1,5 @@
 const url = 'http://192.168.3.18:8081'
+// const url = 'http://2583813ig5.qicp.vip:47588'
 const URL = {
   url,
   apiUrl: `${url}/api`

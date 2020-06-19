@@ -26,7 +26,10 @@ import {
   Icon,
   List,
   Field,
-  Button
+  Button,
+  Notify,
+  IndexBar,
+  IndexAnchor
 } from 'vant'
 // 注册vant组件
 Vue.use(Overlay)
@@ -37,6 +40,9 @@ Vue.use(Icon)
 Vue.use(List)
 Vue.use(Field)
 Vue.use(Button)
+Vue.use(Notify)
+Vue.use(IndexBar)
+Vue.use(IndexAnchor)
 
 import userApi from './api/users'
 import friendApi from './api/friends'

@@ -1,5 +1,5 @@
 <template>
-	<div class='modifyInfo flex flex-direction-column height-100'>
+	<div class='modifyInfo flex flex-direction-column height-100-vh'>
 		<navbar ArrowLeft :leftText='key | userInfoKeyFilt' NotIconRight @click-left='clickLeft'>
 			<template v-slot:right>
 				<input-button value='完成' @click='clickRight' />
@@ -63,14 +63,14 @@ export default {
 				)
 					.then(res => {
 						if (res.data.errno === 0) {
-							this.$toast('修改成功')
+							this.$toast.success('修改成功')
 							this.$store.commit('logout')
 						} else {
-							this.$toast(res.data.message)
+							this.$toast.fail(res.data.message)
 						}
 					})
 					.catch(err => {
-						this.$toast('错误')
+						this.$toast.fail('错误')
 					})
 			}
 		},
@@ -84,8 +84,7 @@ export default {
 	filters: {
 		userInfoKeyFilt
 	},
-	created() {
-	},
+	created() {},
 	props: {
 		modifyItem: Object
 	}

@@ -1,5 +1,5 @@
 <template>
-	<div class='home'>
+	<div class='home min-height-100-vh'>
 		<router-view></router-view>
 
 		<tabbar :change='change'>
@@ -29,6 +29,5 @@ export default {
 
 <style scoped lang="less">
 .home {
-	height: 100vh;
 }
 </style>

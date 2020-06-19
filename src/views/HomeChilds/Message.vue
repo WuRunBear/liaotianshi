@@ -1,8 +1,9 @@
 <template>
 	<div class='message'>
 		<navbar leftText='消息' :dropDownMenu='DDM' />
+
 		<main>
-			<message-item lastMsg lastTime='2020年9月9日' />
+			<message-item :roomId='"2"' lastMsg lastTime='2020年9月9日' />
 		</main>
 	</div>
 </template>
@@ -15,7 +16,7 @@ export default {
 			DDM: [
 				{
 					msg: '添加好友',
-					to: { name: 'Message' },
+					to: { name: 'SelectUser' },
 					icon: 'icon-home'
 				},
 				{

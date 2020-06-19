@@ -1,6 +1,6 @@
 <template>
-	<div class='not-found flex flex-direction-column'>
-		<p class="flex-margin-auto">找不到你要找的东西</p>
+	<div class='not-found flex flex-direction-column height-100-vh'>
+		<p class='flex-margin-auto'>找不到你要找的东西</p>
 	</div>
 </template>
 
@@ -12,6 +12,5 @@ export default {
 
 <style scoped lang="less">
 .not-found {
-  height: 100vh;
 }
 </style>

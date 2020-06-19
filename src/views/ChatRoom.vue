@@ -34,14 +34,6 @@
 					<van-button size='small' type='primary' @click='send'>发送</van-button>
 				</template>
 			</van-field>
-			<!-- <div class='left'></div>
-				<div class='center flex'>
-					<van-field class='input-text' />
-					<input-text id='msgText' class='input-text' @keydown.enter='send' autocomplete='off'  />
-				</div>
-				<div class='right'>
-					<input-button class='input-button' value='发送' @click='send' />
-			</div>-->
 		</footer>
 	</div>
 </template>
@@ -51,52 +43,44 @@ export default {
 	name: 'Chat-Room',
 	data() {
 		return {
-			msgListData: [],
+			// msgListData: [],
 			msgText: ''
-		}
-	},
-	// 使用sockets属性无效
-	sockets: {
-		connect: function() {
-			// this.id = this.$socket.id
-		},
-		msg(data) {
-			let id =
-				this.msgListData.length > 0
-					? this.msgListData[this.msgListData.length - 1].id + 1
-					: 1
-
-			this.msgListData.push({
-				id,
-				msg: data.data,
-				isMe: false
-			})
 		}
 	},
 	methods: {
 		clickLeft: function(e) {
-			this.$router.go(-1)
-			// alert('后退')
+			// 聊天房间返回只返回聊天列表
+			this.$router.push(
+				{
+					name: 'Message'
+				},
+				() => {}
+			)
 		},
 		send: function(e) {
-			let id =
-				this.msgListData.length > 0
-					? this.msgListData[this.msgListData.length - 1].id + 1
-					: 1
-
 			if (this.msgText !== '') {
-				this.msgListData.push({
-					id,
-					msg: this.msgText,
-					isMe: true
+				this.$store.commit('setChatRecord', {
+					roomId: this.roomId,
+					filt: false,
+					success: false,
+					loading: true,
+					type: this.type || 1,
+					userId: this.$store.getters.userInfo.id,
+					msg: this.msgText
 				})
 
-				this.$socket.emit('data', { roomId: this.RoomId, data: this.msgText })
+				this.$socket.emit(
+					'sendChatMsg',
+					{
+						roomId: this.roomId,
+						msg: this.msgText,
+						mode: this.mode || 1
+					},
+					re => {
+						// console.log(re)
+					}
+				)
 			}
-
-			// this.$store.dispatch('SOCKET_msg').then(e => {
-			// 	console.log(e)
-			// })
 
 			this.$refs.msgTextE.focus()
 
@@ -109,17 +93,25 @@ export default {
 			msgList.scrollTo(0, toY)
 		}
 	},
-	mounted() {
-		this.initMsgList()
-		this.$socket.emit('addRoom', { roomId: this.RoomId })
-	},
-	watch: {
-		msgListData: function(newData, oldData) {
-			this.initMsgList()
+	computed: {
+		msgListData: function() {
+			return this.$store.getters.chatRecord
 		}
 	},
+	watch: {},
+	updated() {
+		// dom更新之后执行
+		this.initMsgList()
+	},
+	mounted() {
+		// 加入当前房间
+		this.$socket.emit('addRoom', { roomId: this.roomId })
+
+		// 初始化vuex中聊天记录
+		this.$store.commit('setChatRecord', { roomId: this.roomId })
+	},
 	props: {
-		RoomId: {
+		roomId: {
 			type: String,
 			default: '1'
 		}
@@ -162,7 +154,7 @@ export default {
 						word-wrap: break-word;
 						word-break: normal;
 						border: solid 1px #e4e4e4;
-						white-space: break-spaces;
+						white-space: pre-wrap;
 					}
 				}
 				.my {
@@ -178,35 +170,13 @@ export default {
 
 	footer {
 		padding: 0.5rem;
+		background: #e9e9e9;
+		box-shadow: #7f7f7f 0px 3px 13px 0px;
 
 		> div:first-child {
 			padding: 0 0 0 1rem;
+			border-radius: 5px;
 		}
-		// > div:first-child {
-		// 	// width: 100%;
-		// 	// height: 3rem;
-		// 	flex: 1;
-		// 	border-top: solid 1px #e4e4e4;
-		// 	background: #f4f4f4;
-
-		// 	// .left {
-		// 	// 	flex: 1;
-		// 	// }
-		// 	.center {
-		// 		flex: 7;
-		// 		padding: 0.5rem 0;
-		// 	}
-		// 	.right {
-		// 		flex: 2;
-		// 		box-sizing: border-box;
-		// 		padding: 0.5rem 0;
-
-		// 		.input-button {
-		// 			margin: 0 0.5rem;
-		// 			height: 100%;
-		// 		}
-		// 	}
-		// }
 	}
 }
 </style>

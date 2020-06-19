@@ -100,9 +100,6 @@ export default {
 					} else {
 						userInfo.friend = {}
 					}
-					// 存到localStorage
-					localStorage.setItem('router_userInfo', JSON.stringify(userInfo))
-					// sessionStorage.setItem('router_userInfo', JSON.stringify(userInfo))
 
 					// 跳转路由
 					this.$router.push(

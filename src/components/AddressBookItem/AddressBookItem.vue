@@ -4,10 +4,12 @@
 		:class='{"addressBook-itemCheck":check}'
 		@touchstart='check = true'
 		@touchend='check = false'
+		@click='click'
 	>
 		<div class='left padding-07-rem'>
 			<my-image class='avatar height-100' :src='avatarPath' alt='头像' />
 		</div>
+
 		<div class='right flex flex-direction-column'>
 			<span v-html='msg'></span>
 		</div>
@@ -22,6 +24,14 @@ export default {
 			check: false
 		}
 	},
+	methods: {
+		click: function(e) {
+			// 跳转路由
+			if (this.to) {
+				this.$router.push(this.to, () => {})
+			}
+		}
+	},
 	props: {
 		avatarPath: {
 			type: String,
@@ -32,6 +42,9 @@ export default {
 		msg: {
 			type: String,
 			default: ''
+		},
+		to: {
+			type: Object
 		}
 	}
 }

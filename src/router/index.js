@@ -7,13 +7,14 @@ import userApi from '../api/users'
 Vue.use(VueRouter)
 
 const
-  Home = () => _lazyLoading(import( /* webpackChunkName: "home" */ '../views/Home.vue')),
-  Message = () => _lazyLoading(import( /* webpackChunkName: "home" */ '../views/HomeChilds/Message.vue')),
-  AddressBook = () => _lazyLoading(import( /* webpackChunkName: "home" */ '../views/HomeChilds/AddressBook.vue')),
-  My = () => _lazyLoading(import( /* webpackChunkName: "home" */ '../views/HomeChilds/My.vue')),
-  MyInfo = () => _lazyLoading(import( /* webpackChunkName: "myInfo" */ '../views/MyInfo.vue')),
-  UserInfo = () => _lazyLoading(import( /* webpackChunkName: "myInfo" */ '../views/UserInfo.vue')),
-  ModifyInfo = () => _lazyLoading(import( /* webpackChunkName: "myInfo" */ '../views/ModifyInfo.vue')),
+  Home = () => _lazyLoading(import( /* webpackChunkName: "Home" */ '../views/Home.vue')),
+  Message = () => _lazyLoading(import( /* webpackChunkName: "Message" */ '../views/HomeChilds/Message.vue')),
+  AddressBook = () => _lazyLoading(import( /* webpackChunkName: "AddressBook" */ '../views/HomeChilds/AddressBook.vue')),
+  My = () => _lazyLoading(import( /* webpackChunkName: "My" */ '../views/HomeChilds/My.vue')),
+  NewFriend = () => _lazyLoading(import( /* webpackChunkName: "AddressBook" */ '../views/NewFriend.vue')),
+  MyInfo = () => _lazyLoading(import( /* webpackChunkName: "MyInfo" */ '../views/MyInfo.vue')),
+  UserInfo = () => _lazyLoading(import( /* webpackChunkName: "UserInfo" */ '../views/UserInfo.vue')),
+  ModifyInfo = () => _lazyLoading(import( /* webpackChunkName: "MyInfo" */ '../views/ModifyInfo.vue')),
   SelectUser = () => _lazyLoading(import( /* webpackChunkName: "SelectUser" */ '../views/SelectUser.vue')),
   ChatRoom = () => _lazyLoading(import( /* webpackChunkName: "ChatRoom" */ '../views/ChatRoom.vue')),
   Login = () => _lazyLoading(import( /* webpackChunkName: "login" */ '../views/Login.vue')),
@@ -85,7 +86,10 @@ const routes = [{
       // 如果to.params.userInfo不存在就拿localstorage里的
       to.params.userInfo = to.params.userInfo || localUserInfo
 
+      
       if (to.params.userInfo) {
+        // 存到localStorage
+        localStorage.setItem('router_userInfo', JSON.stringify(to.params.userInfo))
         next()
         return
       }
@@ -94,6 +98,19 @@ const routes = [{
       next({
         name
       })
+      return
+    }
+  },
+  {
+    path: '/newFriend',
+    name: 'NewFriend',
+    meta: {
+      loginRequired: true
+    },
+    component: NewFriend,
+    props: true,
+    beforeEnter: (to, from, next) => {
+      next()
       return
     }
   },
@@ -129,7 +146,7 @@ const routes = [{
     component: SelectUser
   },
   {
-    path: '/chatRoom/:RoomId',
+    path: '/chatRoom/:roomId',
     name: 'ChatRoom',
     meta: {
       loginRequired: true

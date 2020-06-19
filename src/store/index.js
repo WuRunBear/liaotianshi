@@ -13,7 +13,10 @@ export default new Vuex.Store({
     loadingTimer: null,
     // selectUser的用户数据
     selectUserData: {},
-    chatRoom: []
+    // chatRoom中的聊天记录
+    chatRecord: [],
+    // 新消息提示
+    notify: {}
   },
   mutations: {
     /**
@@ -30,11 +33,72 @@ export default new Vuex.Store({
       state.selectUserData = {}
     },
     /**
+     * 添加聊天记录
+     * @param {Object} data 数据
+     */
+    setChatRecord(state, data) {
+      try {
+        state.chatRecord = JSON.parse(localStorage.getItem(`chatRecord_${data.roomId}`)) || []
+      } catch (error) {
+        state.chatRecord = []
+      }
+
+      if (data.msg && data.userId) {
+
+        // 设置聊天记录的id
+        let id =
+          state.chatRecord.length > 0 ?
+          state.chatRecord.slice(-1)[0].id + 1 :
+          1
+
+        // 将聊天记录加到chatRecord中  用房间Id做下标
+        state.chatRecord.push({
+          id,
+          roomId: data.roomId,
+          userId: data.userId,
+          msg: data.msg,
+          filt: data.filt,
+          success: data.success,
+          loading: data.loading,
+          type: data.type || 1,
+          isMe: state.userInfo.id == data.userId
+        })
+
+        // 将数据存到localstorage中  用chatRecord_+房间Id做为key
+        try {
+          localStorage.setItem(`chatRecord_${data.roomId}`, JSON.stringify(state.chatRecord))
+        } catch (error) {
+          localStorage.setItem(`chatRecord_${data.roomId}`, '[]')
+        }
+      }
+    },
+    /**
+     * 设置消息通知的数据
+     * @param {*} notify 
+     */
+    setNotify(state, notify = {}) {
+      // 先清除定时器
+      window.clearTimeout(state.notify.time)
+
+      // 2000毫秒后关闭通知
+      state.notify.time = window.setTimeout(() => {
+        state.notify.show = false
+      }, 2000);
+
+
+      notify.to = {
+        name: 'AddressBook'
+      }
+      notify.show = true
+
+      state.notify = notify
+    },
+    /**
      * 登录用户信息存储
      * @param {String} userInfo 用户数据 Json格式
      */
     login(state, userInfo) {
-      state.userInfo = JSON.stringify(userInfo)
+      state.userInfo = userInfo
     },
     /**
      * 退出登录 清除vuex中的用户信息
@@ -48,7 +112,7 @@ export default new Vuex.Store({
     showLoading(state) {
       // 先清除定时器
       window.clearTimeout(state.loadingTimer)
-      //三秒后显示加载中提示
+      // 300毫秒后显示加载中提示
       state.loadingTimer = setTimeout(() => {
         state.loading = true
       }, 300)
@@ -61,12 +125,11 @@ export default new Vuex.Store({
       window.clearTimeout(state.loadingTimer)
       state.loading = false
     },
-    chatRoom(state, data) {
-      state.chatRoom[data.roomId] = data.data
-    }
   },
   getters: {
-    // selectUser的用户数据
+    /**
+     * 获取selectUser的用户数据
+     */
     selectUserData: state => {
       return state.selectUserData
     },
@@ -74,11 +137,7 @@ export default new Vuex.Store({
      * 获取用户信息 
      */
     userInfo: state => {
-      try {
-        return JSON.parse(state.userInfo)
-      } catch (error) {
-        return state.userInfo
-      }
+      return state.userInfo
     },
     /**
      * 获取加载中状态
@@ -86,14 +145,32 @@ export default new Vuex.Store({
     loading: state => {
       return state.loading
     },
-    chatRoom: state => {
-      return state.chatRoom
+    /**
+     * 获取聊天记录
+     */
+    chatRecord: state => {
+      return state.chatRecord
+    },
+    /**
+     * 获取消息通知的数据
+     */
+    notify: state => {
+      return state.notify
     }
   },
   actions: {
-    async SOCKET_msg(context, data) {
-      
-      context.commit('chatRoom', data)
+    SOCKET_connect() {},
+    SOCKET_disconnect(e) {},
+    SOCKET_reconnect(e) {},
+
+    // 接收聊天消息
+    async SOCKET_getChatMsg(context, data) {
+      context.commit('setChatRecord', data.data)
+    },
+
+    // 接收添加好友的申请
+    async SOCKET_getAddFriend(context, data) {
+      context.commit('setNotify', data.data)
     }
   },
   modules: {}

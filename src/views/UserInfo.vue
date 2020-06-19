@@ -41,16 +41,18 @@
 		</div>
 
 		<!-- 设置权限、备注等 -->
-		<div class='control'>
+		<div class='control' v-if='isFriend && !isMe'>
 			<item notLeft centerUpText='设置备注' />
 		</div>
 
-		<div class='btn' v-if='userInfo.friend.id'>
-			<input-button class='Chat' value='发消息' />
+		<!-- 发送消息按钮 -->
+		<div class='btn' v-if='isFriend || isMe'>
+			<input-button value='发消息' @click='chat' />
 		</div>
 
-		<div class='btn' v-if='!userInfo.friend.id'>
-			<input-button value='加为好友' class='addFriend' :icon='"add-o"' />
+		<!-- 发送添加好友请求 -->
+		<div class='btn' v-if='!isFriend && !isMe'>
+			<input-button value='加为好友' @click='addFriend' :icon='"add-o"' />
 		</div>
 	</div>
 </template>
@@ -59,12 +61,38 @@
 export default {
 	name: 'UserInfo',
 	data() {
-		return {}
+		return {
+			isFriend: false,
+			isMe:false
+		}
 	},
 	methods: {
 		clickLeft: function(e) {
 			this.$router.go(-1)
+		},
+		addFriend: function(e) {
+			// 显示加载中提示
+			this.$store.commit('showLoading')
+			// 发送添加好友请求
+			this.$socket.emit('addFriend', { friendId: this.userInfo.id }, () => {
+				// 隐藏加载中提示
+				this.$store.commit('hiddenLoading')
+				// 显示请求完成提示
+				this.$toast.success('请求完成')
+			})
+		},
+		chat: function(e) {
+			this.$router.push({
+				name: 'ChatRoom',
+				params: {
+					roomId: this.userInfo.id.toString()
+				}
+			})
 		}
+	},
+	mounted() {
+		this.isFriend = this.userInfo.friend.id === this.$store.getters.userInfo.id
+		this.isMe = this.userInfo.id === this.$store.getters.userInfo.id
 	},
 	filters: {
 		userInfoValueFilt: function(value) {

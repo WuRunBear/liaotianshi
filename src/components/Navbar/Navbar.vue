@@ -148,8 +148,9 @@ export default {
 	.drop-down-menu {
 		width: 8rem;
 		overflow: hidden;
-		background: #eee;
+		background: #5a5a5a;
 		border-radius: 5px;
+		color: #fff;
 		top: 2rem;
 		right: 0.7rem;
 		transition: height 0.5s;
@@ -164,7 +165,7 @@ export default {
 			white-space: nowrap;
 		}
 		.drop-down-menu-item:active {
-			background: #e4e4e4;
+			background: #333;
 		}
 		.drop-down-menu-item:last-child {
 			border-bottom: none;

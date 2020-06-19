@@ -1,20 +1,25 @@
 <template>
 	<div class='addressBook'>
 		<navbar leftText='通讯录' :dropDownMenu='DDM' />
+
 		<main>
-			<div class='group'>
-				<div class='calssify padding-left-07-rem' @click='isShowGroup=!isShowGroup'>加入的群</div>
-				<div :class='{"height-0":isShowGroup}' class='list'>
-					<addressBook-item v-for='item in GroupData' :key='item.key' :msg='item.name' />
-				</div>
+			<div class='newFriend'>
+				<addressBook-item :avatarPath='"/images/add_user.png"' :to='{name: "NewFriend"}' :msg='"新的好友"' />
 			</div>
 
-			<div class='friend'>
-				<div class='calssify padding-left-07-rem' @click='isShowFriend=!isShowFriend'>我的好友</div>
-				<div :class='{"height-0":isShowFriend}' class='list'>
-					<addressBook-item v-for='item in FriendData' :key='item.key' :msg='item.name' />
+			<!-- 好友及群组 -->
+			<van-index-bar :index-list='indexList' :sticky='false'>
+				<div v-for='item in indexBarData' :key='item.key'>
+					<van-index-anchor :index='item.key' />
+
+					<addressBook-item
+						v-for='nextItem in item.friends'
+						:key='nextItem.id'
+						:to='{name:"UserInfo",params:{userInfo:nextItem.userInfo}}'
+						:msg='nextItem.name'
+					/>
 				</div>
-			</div>
+			</van-index-bar>
 		</main>
 	</div>
 </template>
@@ -24,26 +29,109 @@ export default {
 	name: 'AddressBook',
 	data() {
 		return {
-			isShowGroup: false,
-			isShowFriend: false,
-			GroupData: [
+			indexBarData: [
 				{
-					name: '张三李四群',
-					avatarPath: '/images/1.png',
-					key: 1
+					id: 11,
+					friends: [
+						{
+							name: '张三李四群',
+							avatarPath: '/images/1.png',
+							id: 1
+						},
+						{ name: '张三李四群', avatarPath: '/images/1.png', id: 2 }
+					],
+					key: 'Group'
 				},
 				{
-					name: '王五刘六群',
-					avatarPath: '/images/2.png',
-					key: 2
+					id: 1,
+					friends: [
+						{ name: '阿一', id: 1 },
+						{ name: '阿二', id: 2 }
+					],
+					key: 'A'
+				},
+				{
+					id: 2,
+					friends: [
+						{ name: '毕三', id: 3 },
+						{ name: '毕四', id: 4 }
+					],
+					key: 'B'
+				},
+				{
+					id: 3,
+					friends: [
+						{ name: '陈五', id: 5 },
+						{ name: '陈六', id: 6 }
+					],
+					key: 'C'
+				},
+				{
+					id: 4,
+					friends: [
+						{ name: '段七', id: 7 },
+						{ name: '段八', id: 8 }
+					],
+					key: 'D'
+				},
+				{
+					id: 5,
+					friends: [
+						{ name: '俄九', id: 7 },
+						{ name: '俄十', id: 8 }
+					],
+					key: 'E'
+				},
+				{
+					id: 6,
+					friends: [
+						{ name: '俄九', id: 7 },
+						{ name: '俄十', id: 8 }
+					],
+					key: 'F'
+				},
+				{
+					id: 7,
+					friends: [
+						{ name: '俄九', id: 7 },
+						{ name: '俄十', id: 8 }
+					],
+					key: 'G'
+				},
+				{
+					id: 8,
+					friends: [
+						{ name: '俄九', id: 7 },
+						{ name: '俄十', id: 8 }
+					],
+					key: 'H'
+				},
+				{
+					id: 5,
+					friends: [
+						{ name: '俄九', id: 7 },
+						{ name: '俄十', id: 8 }
+					],
+					key: 'I'
+				},
+				{
+					id: 9,
+					friends: [
+						{ name: '俄九', id: 7 },
+						{ name: '俄十', id: 8 }
+					],
+					key: 'J'
+				},
+				{
+					id: 10,
+					friends: [
+						{ name: '~九', id: 7 },
+						{ name: '^十', id: 8 }
+					],
+					key: '#'
 				}
 			],
-			FriendData: [
-				{ name: '张三', key: 1 },
-				{ name: '李四', key: 2 },
-				{ name: '王五', key: 3 },
-				{ name: '刘六', key: 4 }
-			],
+			indexList: [],
 			DDM: [
 				{
 					msg: '添加好友',
@@ -64,31 +152,15 @@ export default {
 		}
 	},
 	mounted() {
-		// 初始化分组的高度 用于transition过度
-		let Group = document.querySelector('.group .list'),
-			Friend = document.querySelector('.friend .list')
-
-		Group.style.height = `${Group.scrollHeight}px`
-		Friend.style.height = `${Friend.scrollHeight}px`
+		// 初始化索引列表
+		this.indexBarData.forEach(element => {
+			this.indexList.push(element.key)
+		})
 	}
 }
 </script>
 
 <style scoped lang='less'>
 .addressBook {
-	.calssify {
-		height: 2rem;
-		line-height: 2rem;
-		font-size: 0.9rem;
-		background: #dfdfdf;
-		border: solid 1px #c9c9c9;
-	}
-	.calssify:active {
-		background: #d0d0d0;
-	}
-	.list {
-		overflow: hidden;
-		transition: height 0.2s;
-	}
 }
 </style>
