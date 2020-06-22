@@ -89,7 +89,8 @@ export default {
 		}
 	}
 	.center {
-		width: 90%;
+		// width: 90%;
+		flex: 1;
 
 		> * {
 			flex: 1;
@@ -105,7 +106,7 @@ export default {
 		}
 	}
 	.right {
-		width: 10%;
+		// width: 10%;
 	}
 }
 </style>

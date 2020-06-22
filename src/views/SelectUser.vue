@@ -1,18 +1,28 @@
 <template>
-	<div class='selectUser height-100 flex flex-direction-column'>
+	<div class='selectUser height-100-vh flex flex-direction-column'>
 		<navbar ArrowLeft @click-left='clickLeft' leftText='添加朋友' NotIconRight NotRightDDM />
 		<div class='selectBox flex'>
 			<input
 				type='text'
 				class='selectText height-100'
 				placeholder='输入账号／昵称搜索'
-				v-model.trim='selectUserComputed.selectInfo.selectText'
-				@keydown.enter='function(e){ selectUser(e);  selectUserComputed.userList.rows=[];selectUserComputed.userList.count=0}'
+				v-model='selectUserComputed.selectInfo.selectText'
+				@keydown.enter='function(e){ 
+					selectUser(e);  
+					selectUserComputed.userList.rows=[];
+					selectUserComputed.userList.count=0;
+					selectInfo.page = 1
+				}'
 			/>
 			<input-button
 				class='selectBtn'
 				value='搜索'
-				@click='function(e){ selectUser(e);  selectUserComputed.userList.rows=[];selectUserComputed.userList.count=0}'
+				@click='function(e){ 
+					selectUser(e);  
+					selectUserComputed.userList.rows=[];
+					selectUserComputed.userList.count=0;
+					selectInfo.page = 1
+				}'
 			/>
 		</div>
 
@@ -90,26 +100,11 @@ export default {
 	methods: {
 		// 选择用户后跳转到userInfo路由
 		toUserInfo: function(e, userInfo) {
-			// 验证是否为好友
-			this.axios(this.$api.friends.isFriend(userInfo.id))
-				.then(res => {
-					// 为0则是好友
-					if (res.data.errno === 0) {
-						// 将好友信息加到userInfo内
-						userInfo.friend = res.data.data
-					} else {
-						userInfo.friend = {}
-					}
-
-					// 跳转路由
-					this.$router.push(
-						{ name: 'UserInfo', params: { userInfo } },
-						() => {}
-					)
-				})
-				.catch(err => {
-					this.$toast('错误')
-				})
+			// 跳转路由
+			this.$router.push(
+				{ name: 'UserInfo', params: { userName: userInfo.userName } },
+				() => {}
+			)
 		},
 		// 搜索用户
 		selectUser: function(e) {
@@ -117,7 +112,6 @@ export default {
 				.then(res => {
 					if (res.data.errno === 0) {
 						// 如果count存在就在selectUser上显示
-
 						if (res.data.data.count) {
 							this.userList.count = res.data.data.count
 							this.userList.rows = this.userList.rows.concat(res.data.data.rows)
@@ -128,9 +122,9 @@ export default {
 							this.userList.rows.push(res.data.data)
 						}
 					} else {
-						// this.userList = res.data
-						if (res.data.errno !== 10010) this.$toast.fail(res.data.message)
-						else {
+						if (res.data.errno !== 0) {
+							this.$toast.fail(res.data.message)
+						} else {
 							this.userList.count = 1
 							this.userList.rows.push(this.$store.getters.userInfo)
 						}
@@ -144,13 +138,11 @@ export default {
 		},
 		clickLeft: function(e) {
 			this.$router.go(-1)
-		},
-		setSelectUser: function() {}
+		}
 	},
 	computed: {
 		selectUserComputed: function() {
 			// 将userList和selectInfo存到vuex中
-
 			this.$store.commit('setSelectUserData', {
 				userList: this.userList,
 				selectInfo: this.selectInfo

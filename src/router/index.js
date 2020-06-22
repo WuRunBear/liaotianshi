@@ -83,13 +83,13 @@ const routes = [{
       } catch (error) {
         localUserInfo = ''
       }
-      // 如果to.params.userInfo不存在就拿localstorage里的
-      to.params.userInfo = to.params.userInfo || localUserInfo
 
-      
-      if (to.params.userInfo) {
+      // 如果to.params.userInfo不存在就拿localstorage里的
+      to.params.userName = to.params.userName || localUserInfo
+
+      if (to.params.userName) {
         // 存到localStorage
-        localStorage.setItem('router_userInfo', JSON.stringify(to.params.userInfo))
+        localStorage.setItem('router_userInfo', JSON.stringify(to.params.userName))
         next()
         return
       }

@@ -15,6 +15,18 @@ function isFriend(friendId) {
   }
 }
 
+/**
+ * 添加好友
+ * @param {Object} friend 添加的好友
+ */
+function addFriend(friend) {
+  return {
+    method: 'post',
+    url: `${url}/addFriend`,
+    data: friend
+  }
+}
 export default {
-  isFriend
+  isFriend,
+  addFriend
 }

@@ -9,8 +9,3 @@ export default {
 	name: 'Not-found'
 }
 </script>
-
-<style scoped lang="less">
-.not-found {
-}
-</style>

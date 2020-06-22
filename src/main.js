@@ -29,7 +29,8 @@ import {
   Button,
   Notify,
   IndexBar,
-  IndexAnchor
+  IndexAnchor,
+  ActionSheet
 } from 'vant'
 // 注册vant组件
 Vue.use(Overlay)
@@ -43,6 +44,7 @@ Vue.use(Button)
 Vue.use(Notify)
 Vue.use(IndexBar)
 Vue.use(IndexAnchor)
+Vue.use(ActionSheet)
 
 import userApi from './api/users'
 import friendApi from './api/friends'

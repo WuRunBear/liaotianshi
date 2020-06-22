@@ -86,10 +86,12 @@ export default new Vuex.Store({
       }, 2000);
 
 
-      notify.to = {
-        name: 'AddressBook'
-      }
-      notify.show = true
+      Object.assign(notify, {
+        to: {
+          name: 'NewFriend'
+        },
+        show: true
+      })
 
       state.notify = notify
     },
@@ -171,6 +173,24 @@ export default new Vuex.Store({
     // 接收添加好友的申请
     async SOCKET_getAddFriend(context, data) {
       context.commit('setNotify', data.data)
+
+      data.data.friendInfo.apply = false
+
+      // 存入localstorage
+      let friends
+      try {
+        friends = JSON.parse(localStorage.getItem('friendApplys')) || []
+      } catch (error) {
+        friends = []
+      }
+
+      if (friends.every(item => {
+          return data.data.friendInfo.id !== item.id
+        })) {
+        data.data.friendInfo.message = data.data.message
+        friends.push(data.data.friendInfo)
+      }
+      localStorage.setItem('friendApplys', JSON.stringify(friends))
     }
   },
   modules: {}
