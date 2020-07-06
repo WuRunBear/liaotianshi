@@ -7,6 +7,8 @@ export default new Vuex.Store({
   state: {
     // 信息
     userInfo: '',
+    // 好友列表
+    friendsList: [],
     // 是否加载状态
     loading: false,
     // 加载状态延迟（定时器setTimeout）
@@ -16,7 +18,9 @@ export default new Vuex.Store({
     // chatRoom中的聊天记录
     chatRecord: [],
     // 新消息提示
-    notify: {}
+    notify: {},
+    // 收到的实时消息ID
+    socketDataId: null
   },
   mutations: {
     /**
@@ -48,8 +52,8 @@ export default new Vuex.Store({
         // 设置聊天记录的id
         let id =
           state.chatRecord.length > 0 ?
-          state.chatRecord.slice(-1)[0].id + 1 :
-          1
+            state.chatRecord.slice(-1)[0].id + 1 :
+            1
 
         // 将聊天记录加到chatRecord中  用房间Id做下标
         state.chatRecord.push({
@@ -96,6 +100,15 @@ export default new Vuex.Store({
       state.notify = notify
     },
     /**
+     * 设置收到的实时消息ID
+     * @param {Number} socketDataId ID
+     */
+    setSocketDataId(state, socketDataId) {
+      if (socketDataId) {
+        state.socketDataId = socketDataId
+      }
+    },
+    /**
      * 登录用户信息存储
      * @param {String} userInfo 用户数据 Json格式
      */
@@ -127,8 +140,20 @@ export default new Vuex.Store({
       window.clearTimeout(state.loadingTimer)
       state.loading = false
     },
+    /**
+     * 设置好有列表数据
+     */
+    setFriendsList(state, data) {
+      state.friendsList = data
+    }
   },
   getters: {
+    /**
+     * 获取好友列表数据
+     */
+    friendsList: state => {
+      return state.friendsList
+    },
     /**
      * 获取selectUser的用户数据
      */
@@ -158,12 +183,18 @@ export default new Vuex.Store({
      */
     notify: state => {
       return state.notify
+    },
+    /**
+     * 获取收到的实时消息ID
+     */
+    socketDataId: state => {
+      return state.socketDataId
     }
   },
   actions: {
-    SOCKET_connect() {},
-    SOCKET_disconnect(e) {},
-    SOCKET_reconnect(e) {},
+    SOCKET_connect() { },
+    SOCKET_disconnect(e) { },
+    SOCKET_reconnect(e) { },
 
     // 接收聊天消息
     async SOCKET_getChatMsg(context, data) {
@@ -172,9 +203,7 @@ export default new Vuex.Store({
 
     // 接收添加好友的申请
     async SOCKET_getAddFriend(context, data) {
-      context.commit('setNotify', data.data)
-
-      data.data.friendInfo.apply = false
+      data.data.apply = false
 
       // 存入localstorage
       let friends
@@ -184,13 +213,26 @@ export default new Vuex.Store({
         friends = []
       }
 
-      if (friends.every(item => {
-          return data.data.friendInfo.id !== item.id
-        })) {
-        data.data.friendInfo.message = data.data.message
-        friends.push(data.data.friendInfo)
+      if (friends.length <= 0 || friends.every(item => {
+
+        if (item) {
+          if ('id' in item.friendInfo) {
+
+            return data.data.friendInfo.id !== item.friendInfo.id
+          }
+        }
+      })) {
+        if (data.data.friendInfo) {
+
+          friends.push(data.data)
+        }
       }
+
       localStorage.setItem('friendApplys', JSON.stringify(friends))
+
+      context.commit('setNotify', data.data)
+
+      context.commit('setSocketDataId', data.data.socketDataId)
     }
   },
   modules: {}

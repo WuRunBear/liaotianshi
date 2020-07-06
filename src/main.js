@@ -73,8 +73,16 @@ Vue.prototype.$api = {
   friends: friendApi
 }
 
-new Vue({
+var V = new Vue({
   router,
   store,
   render: h => h(App),
 }).$mount('#app')
+
+// 全局监听器
+// 监听收到的新消息ID 并通过getSuccess发送到服务端
+V.$watch(function () {
+  return V.$store.getters.socketDataId
+}, function (newV, oldV) {
+  V.$socket.emit('getSuccess',newV)
+});

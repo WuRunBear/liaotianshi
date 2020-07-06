@@ -23,6 +23,10 @@ function userInfoKeyFilt(value) {
       return '城市'
       break
 
+    case 'alias':
+      return '备注'
+      break
+
     default:
       // return value.toString()
       break

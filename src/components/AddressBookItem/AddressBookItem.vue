@@ -1,76 +1,77 @@
 <template>
-	<div
-		class='addressBook-item flex'
-		:class='{"addressBook-itemCheck":check}'
-		@touchstart='check = true'
-		@touchend='check = false'
-		@click='click'
-	>
-		<div class='left padding-07-rem'>
-			<my-image class='avatar height-100' :src='avatarPath' alt='头像' />
-		</div>
+  <div
+    :class='{"addressBook-itemCheck":check}'
+    @click='click'
+    @touchend='check = false'
+    @touchstart='check = true'
+    class='addressBook-item flex'
+  >
+    <div class='left padding-07-rem'>
+      <my-image :src='avatarPath' alt='头像' class='avatar height-100' />
+    </div>
 
-		<div class='right flex flex-direction-column'>
-			<span v-html='msg'></span>
-		</div>
-	</div>
+    <div class='right flex flex-direction-column'>
+      <span v-html='msg.toString()'></span>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-	name: 'addressBook-item',
-	data() {
-		return {
-			check: false
-		}
-	},
-	methods: {
-		click: function(e) {
-			// 跳转路由
-			if (this.to) {
-				this.$router.push(this.to, () => {})
-			}
-		}
-	},
-	props: {
-		avatarPath: {
-			type: String,
-			default: function() {
-				return process.env.BASE_URL + 'images/logo.png'
-			}
-		},
-		msg: {
-			type: String,
-			default: ''
-		},
-		to: {
-			type: Object
-		}
-	}
+  name: 'addressBook-item',
+  data() {
+    return {
+      check: false
+    }
+  },
+  mounted() {},
+  methods: {
+    click: function(e) {
+      // 跳转路由
+      if (this.to) {
+        this.$router.push(this.to, () => {})
+      }
+    }
+  },
+  props: {
+    avatarPath: {
+      type: String,
+      default: function() {
+        return process.env.BASE_URL + 'images/logo.png'
+      }
+    },
+    msg: {
+      type: String,
+      default: ''
+    },
+    to: {
+      type: Object
+    }
+  }
 }
 </script>
 
 <style scoped lang='less'>
 .addressBook-item {
-	height: 3rem;
-	background: #fff;
-	border-bottom: solid 1px #e4e4e4;
+  height: 3rem;
+  background: #fff;
+  border-bottom: solid 1px #e4e4e4;
 
-	.left {
-		width: 3rem;
-		.avatar {
-			background: #e4e4e4;
-			border-radius: 5px;
-		}
-	}
-	.right {
-		flex: 1;
-		span {
-			line-height: 3rem;
-		}
-	}
+  .left {
+    width: 3rem;
+    .avatar {
+      background: #e4e4e4;
+      border-radius: 5px;
+    }
+  }
+  .right {
+    flex: 1;
+    span {
+      line-height: 3rem;
+    }
+  }
 }
 .addressBook-itemCheck {
-	background: #e4e4e4;
+  background: #e4e4e4;
 }
 </style>

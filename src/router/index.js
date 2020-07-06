@@ -23,159 +23,163 @@ const
 
 
 const routes = [{
-    path: '/',
-    redirect: '/home'
+  path: '/',
+  redirect: '/home'
+},
+{
+  path: '/home',
+  name: 'Home',
+  component: Home,
+  meta: {
+    loginRequired: true
   },
-  {
-    path: '/home',
-    name: 'Home',
-    component: Home,
+  children: [{
+    path: 'message',
+    name: 'Message',
     meta: {
       loginRequired: true
     },
-    children: [{
-        path: 'message',
-        name: 'Message',
-        meta: {
-          loginRequired: true
-        },
-        component: Message
-      },
-      {
-        path: 'addressBook',
-        name: 'AddressBook',
-        meta: {
-          loginRequired: true
-        },
-        component: AddressBook
-      },
-      {
-        path: 'my',
-        name: 'My',
-        meta: {
-          loginRequired: true
-        },
-        component: My
-      }
-    ]
+    component: Message
   },
   {
-    path: '/myInfo',
-    name: 'MyInfo',
+    path: 'addressBook',
+    name: 'AddressBook',
     meta: {
       loginRequired: true
     },
-    component: MyInfo,
+    component: AddressBook
   },
   {
-    path: '/userInfo',
-    name: 'UserInfo',
+    path: 'my',
+    name: 'My',
     meta: {
       loginRequired: true
     },
-    component: UserInfo,
-    props: true,
-    beforeEnter: (to, from, next) => {
-      let localUserInfo
+    component: My
+  }
+  ]
+},
+{
+  path: '/myInfo',
+  name: 'MyInfo',
+  meta: {
+    loginRequired: true
+  },
+  component: MyInfo,
+},
+{
+  path: '/userInfo',
+  name: 'UserInfo',
+  meta: {
+    loginRequired: true
+  },
+  component: UserInfo,
+  props: true,
+  beforeEnter: (to, from, next) => {
+    let localUserInfo
 
-      try {
-        localUserInfo = JSON.parse(localStorage.getItem('router_userInfo'))
-      } catch (error) {
-        localUserInfo = ''
-      }
-
-      // 如果to.params.userInfo不存在就拿localstorage里的
-      to.params.userName = to.params.userName || localUserInfo
-
-      if (to.params.userName) {
-        // 存到localStorage
-        localStorage.setItem('router_userInfo', JSON.stringify(to.params.userName))
-        next()
-        return
-      }
-
-      let name = from.name || 'Home'
-      next({
-        name
-      })
-      return
+    try {
+      localUserInfo = JSON.parse(localStorage.getItem('router_userInfo'))
+    } catch (error) {
+      localUserInfo = ''
     }
-  },
-  {
-    path: '/newFriend',
-    name: 'NewFriend',
-    meta: {
-      loginRequired: true
-    },
-    component: NewFriend,
-    props: true,
-    beforeEnter: (to, from, next) => {
+
+    // 如果to.params.userInfo不存在就拿localstorage里的
+    to.params.userName = to.params.userName || localUserInfo
+
+    if (to.params.userName) {
+      // 存到localStorage
+      localStorage.setItem('router_userInfo', JSON.stringify(to.params.userName))
       next()
       return
     }
+
+    let name = from.name || 'Home'
+    next({
+      name
+    })
+    return
+  }
+},
+{
+  path: '/newFriend',
+  name: 'NewFriend',
+  meta: {
+    loginRequired: true
   },
-  {
-    path: '/modifyInfo',
-    name: 'ModifyInfo',
-    meta: {
-      loginRequired: true
-    },
-    component: ModifyInfo,
-    props: true,
-    beforeEnter: (to, from, next) => {
+  component: NewFriend,
+  props: true,
+  beforeEnter: (to, from, next) => {
+    next()
+    return
+  }
+},
+{
+  path: '/modifyInfo',
+  name: 'ModifyInfo',
+  meta: {
+    loginRequired: true
+  },
+  component: ModifyInfo,
+  props: true,
+  beforeEnter: (to, from, next) => {
 
-      if (to.params.modifyItem) {
-        next()
-        return
-      }
-
-      // 隐藏加载页面
-      store.commit('hiddenLoading')
-      next({
-        name: 'MyInfo'
-      })
+    if (to.params.modifyItem) {
+      next()
       return
     }
-  },
-  {
-    path: '/selectUser',
-    name: 'SelectUser',
-    meta: {
-      loginRequired: true
-    },
-    component: SelectUser
-  },
-  {
-    path: '/chatRoom/:roomId',
-    name: 'ChatRoom',
-    meta: {
-      loginRequired: true
-    },
-    component: ChatRoom,
-    props: true
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    meta: {
-      loginRequired: false
-    },
-    component: Login,
-    props: true
-  },
-  {
-    path: '/register',
-    name: 'Register',
-    meta: {
-      loginRequired: false
-    },
-    component: Register,
-    props: true
-  },
-  {
-    path: '*',
-    component: Notfound
+
+    // 隐藏加载页面
+    store.commit('hiddenLoading')
+    if (from) {
+      next(from)
+    } else {
+      next({
+        name: 'Home'
+      })
+    }
+    return
   }
+},
+{
+  path: '/selectUser',
+  name: 'SelectUser',
+  meta: {
+    loginRequired: true
+  },
+  component: SelectUser
+},
+{
+  path: '/chatRoom/:roomId',
+  name: 'ChatRoom',
+  meta: {
+    loginRequired: true
+  },
+  component: ChatRoom,
+  props: true
+},
+{
+  path: '/login',
+  name: 'Login',
+  meta: {
+    loginRequired: false
+  },
+  component: Login,
+  props: true
+},
+{
+  path: '/register',
+  name: 'Register',
+  meta: {
+    loginRequired: false
+  },
+  component: Register,
+  props: true
+},
+{
+  path: '*',
+  component: Notfound
+}
 ]
 
 
@@ -226,7 +230,7 @@ router.beforeEach((to, from, next) => {
           params: {
             toPath
           }
-        }, () => {})
+        }, () => { })
 
         return
       }
