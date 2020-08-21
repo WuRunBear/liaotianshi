@@ -156,7 +156,18 @@ const routes = [{
     loginRequired: true
   },
   component: ChatRoom,
-  props: true
+  props: true,
+  beforeEnter: (to, from, next) => {
+    let friendIds = store.getters.chatFriendIds
+
+    if (friendIds.length > 0) {
+      next()
+    } else {
+      next(from || {
+        name: 'Message'
+      })
+    }
+  }
 },
 {
   path: '/login',

@@ -49,6 +49,7 @@ Vue.use(ActionSheet)
 import userApi from './api/users'
 import friendApi from './api/friends'
 import utilsApi from './api/utils'
+import chatRooms from './api/chatRooms'
 
 // 导入自定义组件
 import components from "@/components/components.js"
@@ -70,7 +71,8 @@ Vue.use(VueAxios, axios)
 Vue.prototype.$api = {
   users: userApi,
   utils: utilsApi,
-  friends: friendApi
+  friends: friendApi,
+  chatRooms: chatRooms
 }
 
 var V = new Vue({
@@ -81,8 +83,10 @@ var V = new Vue({
 
 // 全局监听器
 // 监听收到的新消息ID 并通过getSuccess发送到服务端
-V.$watch(function () {
-  return V.$store.getters.socketDataId
-}, function (newV, oldV) {
-  V.$socket.emit('getSuccess',newV)
-});
+// V.$watch(function () {
+//   return V.$store.getters.socketDataId
+// }, function (newV, oldV) {
+//   console.log(1);
+//   V.$socket.emit('getSuccess', newV,()=>{
+//   })
+// });

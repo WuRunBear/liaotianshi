@@ -17,6 +17,8 @@ export default new Vuex.Store({
     selectUserData: {},
     // chatRoom中的聊天记录
     chatRecord: [],
+    // 当前聊天页面内的好友id
+    chatFriendIds: [],
     // 新消息提示
     notify: {},
     // 收到的实时消息ID
@@ -105,7 +107,13 @@ export default new Vuex.Store({
      */
     setSocketDataId(state, socketDataId) {
       if (socketDataId) {
+        console.log('senmsg1111111111');
         state.socketDataId = socketDataId
+        // if (typeof state.socketDataId === 'array') {
+        //   state.socketDataId.push(socketDataId)
+        // } else {
+        //   state.socketDataId = [socketDataId]
+        // }
       }
     },
     /**
@@ -145,6 +153,29 @@ export default new Vuex.Store({
      */
     setFriendsList(state, data) {
       state.friendsList = data
+    },
+    /**
+     * 当前聊天页面内的好友Id
+     */
+    setChatFriendIds(state, data) {
+      if (typeof data === 'array') {
+        state.chatFriendIds = data
+      }
+
+      if (typeof data === 'number') {
+        if (!state.chatFriendIds.includes(data)) {
+          state.chatFriendIds.push(data)
+        }
+      }
+
+      if (typeof data === 'string') {
+        let d = Number.parseInt(data)
+        if (!Number.isNaN(d)) {
+          if (!state.chatFriendIds.includes(data)) {
+            state.chatFriendIds.push(data)
+          }
+        }
+      }
     }
   },
   getters: {
@@ -189,6 +220,9 @@ export default new Vuex.Store({
      */
     socketDataId: state => {
       return state.socketDataId
+    },
+    chatFriendIds: state => {
+      return state.chatFriendIds
     }
   },
   actions: {
@@ -199,6 +233,8 @@ export default new Vuex.Store({
     // 接收聊天消息
     async SOCKET_getChatMsg(context, data) {
       context.commit('setChatRecord', data.data)
+console.log('senmsg');
+      context.commit('setSocketDataId', data.data.socketDataId)
     },
 
     // 接收添加好友的申请

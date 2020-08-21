@@ -142,6 +142,7 @@ export default {
         })
     },
     setAlias: function(e) {
+      // 设置备注
       this.axios(
         this.$api.friends.changeFriendInfo({
           friendId: this.userInfo.id,
@@ -161,20 +162,56 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err)
+          console.err(err)
           this.$toast.fail('错误')
         })
     },
     chat: function(e) {
-      this.$router.push(
-        {
-          name: 'ChatRoom',
-          params: {
-            roomId: this.userInfo.id.toString()
+      // 获取私聊
+      this.axios(this.$api.chatRooms.getOneToOneChat(this.userInfo.id))
+        .then(res => {
+          if (res.data.errno === 0) {
+            // 将要私聊的好友id存入vuex
+            this.$store.commit('setChatFriendIds', this.userInfo.id)
+
+            this.$router.push(
+              {
+                name: 'ChatRoom',
+                params: {
+                  roomId: res.data.data.roomId.toString(),
+                  friendInfo: this.userInfo
+                }
+              },
+              () => {}
+            )
+          } else {
+            this.axios(this.$api.chatRooms.newOneToOneChat(this.userInfo.id))
+              .then(res => {
+                // 将要私聊的好友id存入vuex
+                this.$store.commit('setChatFriendIds', this.userInfo.id)
+
+                this.$router.push(
+                  {
+                    name: 'ChatRoom',
+                    params: {
+                      roomId: res.data.data.roomId.toString(),
+                      friendInfo: this.userInfo
+                    }
+                  },
+                  () => {}
+                )
+              })
+              .catch(err => {
+                console.log(err)
+
+                this.$toast.fail('错误')
+              })
           }
-        },
-        () => {}
-      )
+        })
+        .catch(err => {
+          console.err(err)
+          this.$toast.fail('错误')
+        })
     }
   },
   mounted() {

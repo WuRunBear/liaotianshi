@@ -19,6 +19,7 @@
     "vuex": "^3.3.0"
   },
   "devDependencies": {
+    "@babel/compat-data": "^7.11.0",
     "@vue/cli-plugin-babel": "~4.2.0",
     "@vue/cli-plugin-router": "~4.2.0",
     "@vue/cli-plugin-vuex": "~4.2.0",
